@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "57449631226",
+    "project_id": "wasp-detection",
+    "storage_bucket": "wasp-detection.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:57449631226:android:0c363c8d77de7395002843",
+        "android_client_info": {
+          "package_name": "com.example.waspas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDf4lVGr6pxPvaYTkj0O-QWVq9Bct0JVyE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

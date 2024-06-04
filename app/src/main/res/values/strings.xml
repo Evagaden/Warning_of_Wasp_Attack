@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Cảnh báo ong bắp cày tấn công</string>
+    <string name="user_name">Người dùng</string>
+    <string name="password">Mật khẩu</string>
+    <string name="greeting">Cảnh báo ong bắp cày tấn công</string>
+    <string name="invalid_user_name_password">Thông tin đăng nhập không chính xác</string>
+    <string name="create_new_account">Tạo tài khoản mới</string>
+    <string name ="erro">Không có kết nối mạng!</string>
+    <string name ="try_again">Vui lòng thử lại</string>
+    <string name ="message_notification0">Ong bắp cày tấn công tại:</string>
+    <string name ="message_notification1">Vườn: %s</string>
+    <string name ="message_notification2">Camera: %s</string>
+    <string name ="message_notification3">Thời gian: %s</string>
+    <string name ="image">ảnh ong bắp cày</string>
+    <string name ="signup">Đăng ký</string>
+    <string name ="sign_up_message">Thông tin đăng ký không chính xác hoặc đã được sử dụng</string>
+    <string name="checking_rules_message">Vui lòng đọc và đồng ý với điều khoản sử dụng</string>
+    <string name="update_account_fail">Cập nhập thông tin thất bại</string>
+    <string name="update_account_success">Cập nhập thông tin thành công</string>
+    <string name="update_account_warning">Vui lòng nhập đầy đủ thông tin</string>
+    <string name="notification_title">Phát hiện %s ong bắp cày tấn công</string>
+    <string name="import_farm">Nhập tên của vườn mới</string>
+    <string name="scan_barcode_instruction">Quét Qr</string>
+    <string name="scan_qr_code">Quét mã Qr</string>
+    <string name="network_error">Không thể kết nối mạng</string>
+    <string name="user_doesnt_exit">Tài khoản của bạn chưa được đăng ký. Vui lòng đăng ký tài </string>
+    <string name="add">Thêm</string>
+</resources>
