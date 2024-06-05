@@ -7,25 +7,23 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.room.Room
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.example.waspas.AppMainApplication
 import com.example.waspas.MainActivity
 import com.example.waspas.R
-import com.example.waspas.data.DefaultAppContainer
 import com.example.waspas.data.NotificationsInfoTable
-import com.example.waspas.data.NotificationsRoomDatabase
 import com.example.waspas.model.NotificationInfo
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 class MyFirebaseMessagingService: FirebaseMessagingService(){
@@ -36,9 +34,10 @@ class MyFirebaseMessagingService: FirebaseMessagingService(){
             val notificationMessage = remoteMessage.data.toString()
             Log.d("MessageReceived2", notificationMessage)
             try {
-                //val notificationInfo = Gson().fromJson(notificationMessage, NotificationInfo::class.java)?: NotificationInfo()
-                this.timestamp = LocalDateTime.now().plusHours(7).format(formatter)
-                //this.timestamp = LocalDateTime.parse(notificationInfo.timestamp).plusHours(7).format(formatter)
+                val zoneId = ZoneId.of("Asia/Bangkok")
+                val notificationInfo = Gson().fromJson(notificationMessage, NotificationInfo::class.java)?: NotificationInfo()
+                //this.timestamp = LocalDateTime.now().plusHours(7).format(formatter)
+                this.timestamp = LocalDateTime.parse(notificationInfo.timestamp).atZone(zoneId).format(formatter)
             }catch (e: Exception)
             {
                 Log.d("MessageReceived", e.message.toString())
@@ -100,12 +99,10 @@ class NotificationWorker(appContext: Context, workerParameters: WorkerParameters
         val timestamp = inputData.getString("timestamp")?:""
         val notificationInfo = Gson().fromJson(notificationMessage, NotificationInfo::class.java)
 
-        val database = Room.databaseBuilder(applicationContext, NotificationsRoomDatabase::class.java, "notification_database").build()
-        val notificationDao = database.notificationInfoDao()
-
-        val defaultAppContainer = DefaultAppContainer(applicationContext)
-        val notificationRepository = defaultAppContainer.appRepository
-        val farmID = notificationRepository.getCameraInfo(notificationInfo.deviceID).farmID
+        val application = applicationContext as AppMainApplication
+        val appRepository = application.container.appRepository
+        val notificationsInfoRepository = application.container.notificationsInfoRepository
+        val farmID = appRepository.getCameraInfo(notificationInfo.deviceID).farmID
 
         val notificationInfoTable = NotificationsInfoTable(
             beeDensity = notificationInfo.beeDensity,
@@ -116,8 +113,7 @@ class NotificationWorker(appContext: Context, workerParameters: WorkerParameters
         )
         return withContext(Dispatchers.IO) {
             try {
-                notificationDao.insertNotificationInfo(notificationInfoTable)
-                Log.d("MessageReceived",notificationDao.getAllNotificationById().first()[0].timestamp)
+                notificationsInfoRepository.insertNotificationInfo(notificationInfoTable)
                 Result.success()
             }catch (e: Exception)
             {

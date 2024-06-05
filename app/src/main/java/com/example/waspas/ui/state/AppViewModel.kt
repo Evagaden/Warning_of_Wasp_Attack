@@ -47,6 +47,7 @@ sealed interface UiState {
     object Loading :UiState
 }
 
+data class ListNotifications(val listNofications: List<NotificationsInfoTable> = listOf())
 class AppViewModel(private val appRepository: AppRepository,
                    private val notificationsInfoRepository: NotificationsInfoRepository,
                    private val userDataStore: UserDataStore
@@ -54,18 +55,15 @@ class AppViewModel(private val appRepository: AppRepository,
     private val _uiState = MutableStateFlow(AppUiState())
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
 
-    val notificationListInfo: StateFlow<List<NotificationsInfoTable>> = notificationsInfoRepository.getAllNotificationById()
-        .map {
-            Log.d("HomeViewModel", "a")
-            _uiState.update {currentState ->
-                currentState.copy(notificationListInfo = it)
-            }
-            uiState.value.notificationListInfo
+    val notificationListInfo: StateFlow<ListNotifications> =
+        notificationsInfoRepository.getAllNotificationById().map {
+            Log.d("AppViewModel", "a")
+            ListNotifications(it)
         }
         .stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(100L),
-        initialValue = arrayListOf()
+        initialValue = ListNotifications()
     )
 
     init {
@@ -79,6 +77,7 @@ class AppViewModel(private val appRepository: AppRepository,
             {
                 runBlocking {
                     val token = Firebase.messaging.token.await()
+                    Log.d("AppViewModel", token)
                     val result = appRepository.sendLoginInfor(
                         userDataStore.userName.first(),
                         userDataStore.password.first(), token)
@@ -104,15 +103,11 @@ class AppViewModel(private val appRepository: AppRepository,
         }
     }
 
-    fun updateNotificationsListInfoTable()
+    fun setCheckedNotificationInfoTable(it: NotificationsInfoTable)
     {
-        lateinit var notificationsInfoTable: List<NotificationsInfoTable>
-        runBlocking {
-            notificationsInfoTable = notificationsInfoRepository.getAllNotificationById().first()
-        }
-        _uiState.update {
-            currentState ->
-            currentState.copy(notificationListInfo = notificationsInfoTable)
+        val a = NotificationsInfoTable(it.order, true, it.beeDensity, it.beeInfo, it.deviceID, it.farmID, it.timestamp)
+        viewModelScope.launch {
+            notificationsInfoRepository.update(a)
         }
     }
 

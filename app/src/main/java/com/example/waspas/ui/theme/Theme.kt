@@ -277,8 +277,7 @@ fun WarningOfWaspAttackTheme(
     dynamicColor: Boolean = true,
     content: @Composable() () -> Unit
 ) {
-  val colorScheme = if(!darkTheme)
-      {lightScheme} else { darkScheme }
+  val colorScheme = lightScheme
   val view = LocalView.current
   if (!view.isInEditMode) {
     SideEffect {

@@ -116,8 +116,9 @@ fun App(
                     onNotificationInfoButtonClicked = {notificationsInfoTable ->
                         viewModel.updateNotificationInfo(notificationsInfoTable)
                         navController.navigate(AppScreen.NotificationInforScreen.name)
+                        viewModel.setCheckedNotificationInfoTable(notificationsInfoTable)
                     },
-                    listNotification = uiState.notificationListInfo
+                    listNotification = notificationListInfo.listNofications
                 )
             }
 

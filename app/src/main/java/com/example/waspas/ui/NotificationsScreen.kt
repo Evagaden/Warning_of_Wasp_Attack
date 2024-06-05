@@ -1,6 +1,5 @@
 package com.example.waspas.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -66,13 +65,12 @@ fun NotificationButton(
         onClick = { onNotificationButtonClicked(notificationsInfoTable)},
         colors = ButtonDefaults.buttonColors(
             containerColor = if(notificationsInfoTable.check){
-                Log.d("NotificationScree", "co mau trang")
                 MaterialTheme.colorScheme.onPrimary
             }else
             {
-                Log.d("NotificationScree", "co mau do")
-                MaterialTheme.colorScheme.onErrorContainer
-            }
+                MaterialTheme.colorScheme.secondaryContainer
+            },
+            contentColor = MaterialTheme.colorScheme.scrim
         )
     ) {
         Column(

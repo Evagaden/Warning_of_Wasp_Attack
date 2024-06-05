@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -33,6 +34,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -140,37 +142,49 @@ fun UserScreen(
                     }
                 },
                 actions = {
-                    IconButton(
+                    Button(
                         onClick = {
                             visibleList = !visibleList
                             visibleAdd = false
                             visible = false
-                        }) {
-                        BadgedBox(
-                            badge = {
-                                Badge {
-                                    var badgeNumber = 0
-                                    listNotification.forEach{
-                                        if(!it.check)
-                                        {
-                                            badgeNumber += 1
-                                        }
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = MaterialTheme.colorScheme.scrim
+                        ),
+                        modifier = Modifier.fillMaxHeight()) {
+                        var badgeNumber = 0
+                        listNotification.forEach{
+                            if(!it.check)
+                            {
+                                badgeNumber += 1
+                            }
+                        }
+                        if(badgeNumber != 0)
+                        {
+                            BadgedBox(
+                                badge = {
+                                    Badge {
+                                        Text(
+                                            badgeNumber.toString()
+                                        )
                                     }
-
-                                    Text(
-                                        badgeNumber.toString()
-                                    )
-                                }
-                            }) {
+                                }) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.baseline_notifications_24),
+                                    contentDescription = "Localized description"
+                                )
+                            }
+                        }
+                        else
+                        {
                             Icon(
                                 painter = painterResource(id = R.drawable.baseline_notifications_24),
                                 contentDescription = "Localized description"
                             )
                         }
-                        }
-                        },
-                        scrollBehavior = scrollBehavior,
-                    )
+                    }},
+                scrollBehavior = scrollBehavior
+            )
         },
     ) { innerPadding ->
         when(farmState)
@@ -497,7 +511,7 @@ fun DeleteBackground(
 fun WaspAppPreview(modifier: Modifier = Modifier)
 {
     WarningOfWaspAttackTheme {
-        AddFarm(onClearButtonClicked = { /*TODO*/ }, onAddButtonClicked = {a,b,c,d,e -> })
+
     }
 }
 
